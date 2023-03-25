@@ -1,5 +1,7 @@
 package com.rk1.kafka;
 
+import com.rk1.configs.KafkaConfigProperties;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +13,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@RequiredArgsConstructor
 public class KafkaProducer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
-    public KafkaProducer(KafkaTemplate<String, String> kafkaTemplate) {
+    private  KafkaConfigProperties kafkaConfigProperties;
+
+
+    public KafkaProducer() {
 
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -29,6 +35,7 @@ public class KafkaProducer {
     }
 
     public void sendMessage(String message) {
-        kafkaTemplate.send("test1", message);
+
+        kafkaTemplate.send("test1", kafkaConfigProperties.toString());
     }
 }
