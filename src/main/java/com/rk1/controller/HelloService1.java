@@ -7,13 +7,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class HelloService {
+public class HelloService1 {
 
-    @GetMapping(value="/hello")
+    @Autowired
+    KafkaProducer kafkaPublisher;
+
+    @GetMapping(value="/hello2")
     @ResponseBody
     public String bootup()
     {
-
+//        kafkaPublisher.sendMessage("Test1");
         return "SpringBoot is up and running";
 
     }
