@@ -11,6 +11,6 @@ import java.io.IOException;
 public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() throws IOException {
-        return new OpenAPIV3Parser().read("openapi.yml");
+        return new OpenAPIV3Parser().read("apiSpec/openapi.yml");
     }
 }

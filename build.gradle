@@ -32,6 +32,7 @@ dependencies {
 	implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.4'
 //	implementation 'org.springdoc:springdoc-openapi-core:1.6.4'
 	implementation 'io.swagger.parser.v3:swagger-parser:2.0.26'
+	implementation 'org.projectlombok:lombok:1.18.20'
 
 
 
