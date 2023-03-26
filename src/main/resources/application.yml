@@ -29,7 +29,7 @@ spring:
       auto-offset-reset: earliest
       enable-auto-commit: true
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringSerializer #io.confluent.kafka.serializers.KafkaAvroDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #io.confluent.kafka.serializers.KafkaAvroDeserializer
       properties:
         schema.registry.url: http://localhost:8081 # URL of the schema registry
         # any other consumer properties can be set here
@@ -53,7 +53,7 @@ external:
       group-id: my-group # a unique identifier for the consumer group
       auto-offset-reset: earliest
       enable-auto-commit: true
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
       value-deserializer: org.apache.kafka.common.serialization.StringSerializer #io.confluent.kafka.serializers.KafkaAvroDeserializer
       properties:
         schema.registry.url: http://localhost:8081 # URL of the schema registry
