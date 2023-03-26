@@ -16,7 +16,7 @@ public class HelloService1 {
     @ResponseBody
     public String bootup()
     {
-        kafkaPublisher.sendMessage("Test1");
+        kafkaPublisher.sendMessage("test1", "Test1");
         return "SpringBoot is up and running";
 
     }

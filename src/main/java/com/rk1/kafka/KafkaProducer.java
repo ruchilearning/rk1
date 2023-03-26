@@ -9,6 +9,7 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,26 +17,24 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaProducer {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
     private  KafkaConfigProperties kafkaConfigProperties;
 
-
-    public KafkaProducer() {
-
+    @PostConstruct
+    public void KafkaProducer() {
         Map<String, Object> props = new HashMap<>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-
         DefaultKafkaProducerFactory<String, String> pf = new DefaultKafkaProducerFactory<>(props);
         KafkaTemplate<String, String> template = new KafkaTemplate<>(pf);
         this.kafkaTemplate = template;
+
     }
 
-    public void sendMessage(String message) {
-
-        kafkaTemplate.send("test1", kafkaConfigProperties.toString());
+    public void sendMessage(String topic, String message) {
+        kafkaTemplate.send(topic, message);
     }
 }
