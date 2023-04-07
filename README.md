@@ -29,7 +29,10 @@ oc new-app codecentric/springboot-maven3-centos~https://github.com/codecentric/s
 This will create:
 
 ```shell
-oc expose springboot-sample-app --hostname=www.example.com
+docker build -t my-image-name .
+docker run -p 8080:8080 my-image-name
+docker logs -f my-container-name
+
 ```
 
 ## Copyright
