@@ -1,20 +1,8 @@
 
 
 server:
-  port: 8080
+  port: 8095
 spring:
-#  datasource:
-#    url: jdbc:mysql://localhost:3306/user
-#    username: user
-#    password: user
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL5Dialect
-
-
   kafka:
     bootstrap-servers: localhost:9092 # comma-separated list of broker addresses
     client-id: my-app # an identifier for the client
@@ -59,8 +47,3 @@ external:
         schema.registry.url: http://localhost:8081 # URL of the schema registry
         # any other consumer properties can be set here
 
-api-services:
-  hello:
-    baseUrl: http://localhost:8090
-    api1: /api/one
-    api2: /api/two

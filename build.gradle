@@ -100,3 +100,14 @@ dependencyManagement {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+
+test {
+	useJUnitPlatform()
+}
+
+sourceSets {
+	test {
+		java.srcDirs = ['src/test/java/unit', 'src/test/java/component']
+	}
+}

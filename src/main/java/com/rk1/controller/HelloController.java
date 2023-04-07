@@ -1,6 +1,5 @@
 package com.rk1.controller;
 
-import com.rk1.configs.KafkaConfigProperties;
 import com.rk1.repository.HelloRepository;
 import com.rk1.service.HelloService;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +18,12 @@ import java.time.Duration;
 @RequestMapping(value="hello")
 public class HelloController {
 
-    private final KafkaConfigProperties kafkaConfigProperties;
     private final HelloService helloService;
 
     @GetMapping(value="/hello")
     @ResponseBody
     public Mono<HelloRepository.HelloResponse> bootUp()
     {
-
-//        return "SpringBoot is up and running";
-//        return kafkaConfigProperties.toString();
         return helloService.callHello();
 
     }

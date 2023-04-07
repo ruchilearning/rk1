@@ -1,6 +1,7 @@
 package com.rk1.repository;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,15 +11,20 @@ import reactor.core.publisher.Mono;
 public class HelloRepository {
 
     private final WebClient webClient;
+    @Value("${api-services.hello.baseUrl}")
+    private String baseUrl;
+
+    @Value("${api-services.hello.api2}")
+    private String path;
 
     public HelloRepository(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8090").build();
+        this.webClient = webClientBuilder.baseUrl(baseUrl).build();
     }
 
     public Mono<HelloResponse> getExample() {
         return webClient.get()
-                .uri("/api/two")
-//                .accept(MediaType.APPLICATION_JSON)
+                .uri(baseUrl + path)
+                .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(HelloResponse.class);
     }
