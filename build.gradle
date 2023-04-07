@@ -3,17 +3,13 @@ buildscript {
 	repositories {
 		mavenCentral() // or any other repository where the plugin is hosted
 	}
-//	dependencies {
-//		classpath "com.commercehub.gradle.plugin.avro:gradle-avro-plugin:0.99.99"
-//	}
 }
 
 plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
-//	id "com.commercehub.gradle.plugin.avro" version "0.99.99"
-
+	id "com.github.davidmc24.gradle.plugin.avro" version "1.6.0"
 
 }
 
@@ -27,14 +23,14 @@ repositories {
 
 
 //avro {
-//	createSetters = true // optional
-//	enableDecimalLogicalType = true // optional
-//	enableGradleCompatibility = true // optional
-//	outputCharacters = 'UTF-8' // optional
-//	file('src/main/resources/avro').outputDir = file('src/main/java/')
+//	createSetters = false
+//	source file("src/avro/normalized")
+//	outputDir = file("build/avro/resolved")
 //}
 
-
+//compileAvro.source = 'src/main/avro'
+//compileAvro.destinationDir = file("$buildDir/generated-sources/avro")
+//
 
 
 group = 'com.example'
@@ -70,6 +66,7 @@ dependencies {
 //	implementation 'org.springdoc:springdoc-openapi-core:1.6.4'
 	implementation 'io.swagger.parser.v3:swagger-parser:2.0.26'
 	implementation 'org.projectlombok:lombok:1.18.20'
+	implementation 'org.apache.avro:avro:1.11.0'
 	runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.80.Final:osx-aarch_64'
 
 //	implementation 'io.github.resilience4j:resilience4j-spring-boot2:2.0.2'

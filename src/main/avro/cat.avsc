@@ -1,0 +1,24 @@
+{
+  "namespace": "com.rk5.cat",
+  "type": "record",
+  "name": "Cat",
+  "fields": [
+    {"name": "species", "type": {"type": "enum", "name": "Species", "symbols": ["Felis_catus"]}, "default": "Felis_catus"},
+    {"name": "name", "type": "string"},
+    {"name": "age", "type": "int"},
+    {"name": "weight", "type": "float"},
+    {"name": "isEndangered", "type": "boolean", "default": false},
+    {"name": "habitat", "type": {
+      "type": "array",
+      "items": {
+        "type": "record",
+        "name": "Habitat",
+        "fields": [
+          {"name": "type", "type": "string"},
+          {"name": "region", "type": "string"}
+        ]
+      }
+    }},
+    {"name": "breed", "type": "string", "default": "Mixed Breed"}
+  ]
+}

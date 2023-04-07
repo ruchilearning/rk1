@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "com.rk5.avro",
+  "namespace": "com.rk5.person",
   "name": "Person",
   "fields": [
     {"name": "firstName", "type": "string"},
