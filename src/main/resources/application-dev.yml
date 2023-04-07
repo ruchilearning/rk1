@@ -1,0 +1,49 @@
+
+
+server:
+  port: 8095
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092 # comma-separated list of broker addresses
+    client-id: my-app # an identifier for the client
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer #io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081 # URL of the schema registry
+        # any other producer properties can be set here
+    consumer:
+      group-id: my-group # a unique identifier for the consumer group
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer #io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081 # URL of the schema registry
+        # any other consumer properties can be set here
+
+
+external:
+  kafka:
+    bootstrap-servers: localhost:9092 # comma-separated list of broker addresses
+    client-id: my-app # an identifier for the client
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer #io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081 # URL of the schema registry
+    schema-registry:
+      url: http://localhost:8081
+      subject-name-strategy: topic
+      useLatestVersion: true
+
+    consumer:
+      group-id: my-group # a unique identifier for the consumer group
+      auto-offset-reset: earliest
+      enable-auto-commit: true
+      key-deserializer: org.apache.kafka.common.serialization.StringSerializer
+      value-deserializer: org.apache.kafka.common.serialization.StringSerializer #io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081 # URL of the schema registry
+        # any other consumer properties can be set here
+
