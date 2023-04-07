@@ -28,14 +28,6 @@ oc new-app codecentric/springboot-maven3-centos~https://github.com/codecentric/s
 
 This will create:
 
-* An ImageStream called "springboot-maven3-centos"
-* An ImageStream called "springboot-sample-app"
-* A BuildConfig called "springboot-sample-app"
-* DeploymentConfig called "springboot-sample-app"
-* Service called "springboot-sample-app"
-
-If you want to access the app from outside your OpenShift installation, you have to expose the springboot-sample-app service:
-
 ```shell
 oc expose springboot-sample-app --hostname=www.example.com
 ```
