@@ -7,7 +7,7 @@
 For building and running the application you need:
 
 - [JDK 17](https://openjdk.org/projects/jdk/17/)
-- [gradle](https://gradle.org/)
+- [Gradle](https://gradle.org/)
 
 ## Running the application locally
 
