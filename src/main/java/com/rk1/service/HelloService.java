@@ -1,24 +1,24 @@
-package com.rk1.controller;
+package com.rk1.service;
 
 import com.rk1.configs.KafkaConfigProperties;
+import com.rk1.repository.HelloRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
-@RestController
+@Service
 @RequiredArgsConstructor
 public class HelloService {
 
     private final KafkaConfigProperties kafkaConfigProperties;
+    private final HelloRepository helloRepository;
 
-    @GetMapping(value="/hello")
-    @ResponseBody
-    public String bootup()
+
+    public Mono<HelloRepository.HelloResponse> callHello()
     {
-
-//        return "SpringBoot is up and running";
-        return kafkaConfigProperties.toString();
-
+        return helloRepository.getExample();
     }
 }

@@ -1,12 +1,47 @@
+
+buildscript {
+	repositories {
+		mavenCentral() // or any other repository where the plugin is hosted
+	}
+//	dependencies {
+//		classpath "com.commercehub.gradle.plugin.avro:gradle-avro-plugin:0.99.99"
+//	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.7.5'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 	id 'java'
+//	id "com.commercehub.gradle.plugin.avro" version "0.99.99"
+
+
 }
+
+
+repositories {
+	mavenCentral() // or any other repository where your project's dependencies are hosted
+	maven { url "https://packages.confluent.io/maven/" } // Confluent repository
+	gradlePluginPortal()
+}
+
+
+
+//avro {
+//	createSetters = true // optional
+//	enableDecimalLogicalType = true // optional
+//	enableGradleCompatibility = true // optional
+//	outputCharacters = 'UTF-8' // optional
+//	file('src/main/resources/avro').outputDir = file('src/main/java/')
+//}
+
+
+
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
+//apply plugin: "com.commercehub.gradle.plugin.avro"
+
 
 configurations {
 	compileOnly {
@@ -22,6 +57,7 @@ ext {
 	set('springCloudVersion', "2021.0.4")
 }
 
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -30,9 +66,13 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.4'
 	implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.4'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 //	implementation 'org.springdoc:springdoc-openapi-core:1.6.4'
 	implementation 'io.swagger.parser.v3:swagger-parser:2.0.26'
 	implementation 'org.projectlombok:lombok:1.18.20'
+	runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.80.Final:osx-aarch_64'
+
+//	implementation 'io.github.resilience4j:resilience4j-spring-boot2:2.0.2'
 
 
 
@@ -45,6 +85,13 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.kafka:spring-kafka-test'
+//	testImplementation 'com.github.tomakehurst:wiremock-standalone:2.27.2'
+	testImplementation "com.github.tomakehurst:wiremock-jre8:2.35.0"
+
+	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+	testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+
+
 }
 
 dependencyManagement {
