@@ -3,9 +3,11 @@ package component;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@ComponentScan(basePackages = {"com.rk1"})
 public class MyWireMockConfig {
 
     @Bean(name = "wireMyMockServerEndpoint")

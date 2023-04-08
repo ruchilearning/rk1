@@ -1,5 +1,6 @@
 package component.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -55,9 +56,9 @@ public class MyHelloComponentTest {
         this.wireMyMockServerEndpoint2.stop();
     }
 
-    @SneakyThrows
+
     @Test
-    public void testMyEndpoint() {
+    public void testMyEndpoint() throws JsonProcessingException {
 
         HelloRepository.HelloResponse expected = new HelloRepository.HelloResponse("Alice", 30, "alice@example.com");
 
@@ -80,9 +81,8 @@ public class MyHelloComponentTest {
         wireMyMockServerEndpoint2.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/api/two")));
     }
 
-    @SneakyThrows
     @Test
-    public void testMyEndpoint2() {
+    public void testMyEndpoint2() throws JsonProcessingException {
 
         HelloRepository.HelloResponse expected = new HelloRepository.HelloResponse("Alice", 30, "alice@example.com");
 
