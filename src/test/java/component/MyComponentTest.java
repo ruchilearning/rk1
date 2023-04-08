@@ -28,7 +28,6 @@ import reactor.core.publisher.Mono;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {RkApplication.class, MyWireMockConfig.class})
-@AutoConfigureWebTestClient
 @ActiveProfiles("test")
 @TestPropertySource(properties = {"api-services.hello.baseUrl=http://localhost:8099"})
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
