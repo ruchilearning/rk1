@@ -6,7 +6,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.rk1.RkApplication;
 import com.rk1.repository.HelloRepository;
-import component.configs.MyWireMockConfig;
+import configs.MyWireMockConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

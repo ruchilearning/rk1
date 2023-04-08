@@ -1,4 +1,4 @@
-package component.configs;
+package configs;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
