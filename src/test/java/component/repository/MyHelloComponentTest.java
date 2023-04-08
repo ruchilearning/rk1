@@ -1,4 +1,4 @@
-package component.repository;
+package repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,13 +66,6 @@ public class MyHelloComponentTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(expected);
 
-        this.wireMyMockServerEndpoint2.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
-                .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .withBody(json)));
-
-
 
         Mono<HelloRepository.HelloResponse> helloResponseMono = helloRepository.getExample();
         String expectedJson = objectMapper.writeValueAsString(helloResponseMono.block());
@@ -89,12 +82,6 @@ public class MyHelloComponentTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(expected);
-
-        this.wireMyMockServerEndpoint2.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
-                .willReturn(WireMock.aResponse()
-                        .withStatus(HttpStatus.OK.value())
-                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                        .withBody(json)));
 
         HelloRepository.HelloResponse helloResponse = helloRepository.getExample2();
         String expectedJson = objectMapper.writeValueAsString(helloResponse);

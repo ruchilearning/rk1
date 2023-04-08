@@ -1,0 +1,55 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "method": "GET",
+        "url": "/api/one"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "subdir/response1.json"
+      }
+    },
+    {
+      "id": "8c5db8b0-2db4-4ad7-a99f-38c9b00da3f7",
+      "request": {
+        "url": "/api/two"
+      },
+      "response": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "bodyFileName": "subdir/response2.json"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "url": "/api/three"
+      },
+      "response": {
+        "status": 201,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "Created"
+      }
+    },
+    {
+      "request": {
+        "method": "PUT",
+        "url": "/api/four"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": "Updated"
+      }
+    }
+  ]
+}
