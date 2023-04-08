@@ -6,8 +6,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.rk1.RkApplication;
 import com.rk1.repository.HelloRepository;
-import component.MyWireMockConfig;
-import lombok.SneakyThrows;
+import component.configs.MyWireMockConfig;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,6 +31,7 @@ import reactor.core.publisher.Mono;
 @ContextConfiguration(classes = {RkApplication.class, MyWireMockConfig.class})
 @ActiveProfiles("test")
 @TestPropertySource(properties = {"api-services.hello.baseUrl=http://localhost:8099"})
+@ComponentScan(basePackages = {"com.rk1.configs"})
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class MyComponentTest {
 

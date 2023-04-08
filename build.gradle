@@ -108,6 +108,6 @@ test {
 
 sourceSets {
 	test {
-		java.srcDirs = ['src/test/java/unit', 'src/test/java/component']
+		java.srcDirs = ['src/test/java/unit', 'src/test/java/component','src/test/java/blackbox']
 	}
 }
