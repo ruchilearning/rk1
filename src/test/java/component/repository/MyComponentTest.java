@@ -1,10 +1,11 @@
-package component;
+package component.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.rk1.RkApplication;
 import com.rk1.repository.HelloRepository;
+import component.MyWireMockConfig;
 import lombok.SneakyThrows;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -28,14 +29,17 @@ import reactor.core.publisher.Mono;
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(classes = {RkApplication.class, MyWireMockConfig.class})
-@AutoConfigureWebTestClient
 @ActiveProfiles("test")
-@TestPropertySource(properties = {"api-services.hello.baseUrl=http://localhost:8091"})
+@TestPropertySource(properties = {"api-services.hello.baseUrl=http://localhost:8099"})
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class MyHelloComponentTest {
+public class MyComponentTest {
 
     @Autowired
     private HelloRepository helloRepository;
+
+    @Autowired
+    @Qualifier("wireMyMockServerEndpoint")
+    private WireMockServer wireMyMockServerEndpoint;
 
     @Autowired
     @Qualifier("wireMyMockServerEndpoint2")
@@ -46,11 +50,13 @@ public class MyHelloComponentTest {
 
     @BeforeEach
     public void setup() {
+        this.wireMyMockServerEndpoint.start();
         this.wireMyMockServerEndpoint2.start();
     }
 
     @AfterEach
     public void tearDown() {
+        this.wireMyMockServerEndpoint.stop();
         this.wireMyMockServerEndpoint2.stop();
     }
 
@@ -63,7 +69,7 @@ public class MyHelloComponentTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(expected);
 
-        this.wireMyMockServerEndpoint2.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
+        this.wireMyMockServerEndpoint.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -76,7 +82,7 @@ public class MyHelloComponentTest {
 
 
         Assertions.assertThat(expectedJson).isEqualTo(json);
-        wireMyMockServerEndpoint2.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/api/two")));
+        wireMyMockServerEndpoint.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/api/two")));
     }
 
     @SneakyThrows
@@ -88,7 +94,7 @@ public class MyHelloComponentTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(expected);
 
-        this.wireMyMockServerEndpoint2.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
+        this.wireMyMockServerEndpoint.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
                 .willReturn(WireMock.aResponse()
                         .withStatus(HttpStatus.OK.value())
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
