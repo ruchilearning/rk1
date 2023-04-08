@@ -76,23 +76,23 @@ public class MyComponentTest {
         wireMockServer.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/api/two")));
     }
 
-//    @Test
-//    public void testMyService() {
-//        String expectedResponse = "{\n" +
-//                "    \"name\": \"Alice\",\n" +
-//                "    \"age\": 30,\n" +
-//                "    \"email\": \"alice@example.com\"\n" +
-//                "  }";
-//
-//        wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("http://localhost:8081/api/one"))
-//                .willReturn(WireMock.aResponse()
-//                        .withStatus(HttpStatus.OK.value())
-//                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                        .withBody(expectedResponse)));
-//
-//        Mono<HelloRepository.HelloResponse> helloResponseMono = helloRepository.getExample();
-//
-//        Assertions.assertThat(helloResponseMono.block()).isEqualTo(expectedResponse);
-//    }
+    @SneakyThrows
+    @Test
+    public void testMyEndpoint2() {
+        HelloRepository.HelloResponse expected = new HelloRepository.HelloResponse("Alice", 30, "alice@example.com");
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(expected);
+
+        this.wireMockServer.stubFor(WireMock.get(WireMock.urlEqualTo("/api/two"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .withBody(json)));
+
+        HelloRepository.HelloResponse helloResponse = helloRepository.getExample2();
+        String expectedJson = objectMapper.writeValueAsString(helloResponse);
+
+        Assertions.assertThat(expectedJson).isEqualTo(json);
+    }
 }
