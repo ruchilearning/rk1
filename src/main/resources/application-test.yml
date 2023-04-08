@@ -47,3 +47,8 @@ external:
         schema.registry.url: http://localhost:8081 # URL of the schema registry
         # any other consumer properties can be set here
 
+api-services:
+  hello:
+    baseUrl: http://localhost:8090
+    api1: /api/one
+    api2: /api/two

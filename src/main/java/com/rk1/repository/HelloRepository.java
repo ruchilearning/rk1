@@ -1,6 +1,6 @@
 package com.rk1.repository;
 
-import lombok.Data;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Repository;
@@ -29,7 +29,18 @@ public class HelloRepository {
                 .bodyToMono(HelloResponse.class);
     }
 
+    public HelloResponse getExample2() {
+        return webClient.get()
+                .uri(baseUrl + path)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(HelloResponse.class).block();
+    }
+
     @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class HelloResponse {
         private String name;
         private int age;
