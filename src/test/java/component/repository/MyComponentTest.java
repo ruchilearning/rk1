@@ -99,7 +99,7 @@ public class MyComponentTest {
                         .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                         .withBody(json)));
 
-        HelloRepository.HelloResponse helloResponse = helloRepository.getExample2();
+        HelloRepository.HelloResponse helloResponse = helloRepository.getExample_two();
         String expectedJson = objectMapper.writeValueAsString(helloResponse);
 
         Assertions.assertThat(expectedJson).isEqualTo(json);

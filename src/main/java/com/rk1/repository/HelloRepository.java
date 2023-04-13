@@ -29,12 +29,20 @@ public class HelloRepository {
                 .bodyToMono(HelloResponse.class);
     }
 
-    public HelloResponse getExample2() {
+    public HelloResponse getExample_two() {
         return webClient.get()
                 .uri(baseUrl + path)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(HelloResponse.class).block();
+    }
+
+    public Mono<HelloResponse> getExample_three() {
+        return webClient.get()
+                .uri(baseUrl + "/api/three")
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(HelloResponse.class);
     }
 
     @Data

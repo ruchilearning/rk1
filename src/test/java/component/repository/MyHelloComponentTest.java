@@ -18,6 +18,9 @@ import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWeb
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -80,9 +83,31 @@ public class MyHelloComponentTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(expected);
 
-        HelloRepository.HelloResponse helloResponse = helloRepository.getExample2();
+        HelloRepository.HelloResponse helloResponse = helloRepository.getExample_two();
         String expectedJson = objectMapper.writeValueAsString(helloResponse);
 
         Assertions.assertThat(expectedJson).isEqualTo(json);
+    }
+
+    @Test
+    public void testMyEndpoint_api_three() throws JsonProcessingException {
+
+        HelloRepository.HelloResponse expected = new HelloRepository.HelloResponse("Alice", 30, "alice@example.com");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(expected);
+
+        this.wireMyMockServerEndpoint2.stubFor(WireMock.get(WireMock.urlEqualTo("/api/three"))
+                .willReturn(WireMock.aResponse()
+                        .withStatus(HttpStatus.OK.value())
+                        .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                        .withBody(json)));
+
+        Mono<HelloRepository.HelloResponse> helloResponseMono = helloRepository.getExample_three();
+        String expectedJson = objectMapper.writeValueAsString(helloResponseMono.block());
+
+
+        Assertions.assertThat(expectedJson).isEqualTo(json);
+        wireMyMockServerEndpoint2.verify(WireMock.getRequestedFor(WireMock.urlEqualTo("/api/three")));
     }
 }
