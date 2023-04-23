@@ -1,0 +1,11 @@
+{
+  "type": "record",
+  "name": "UserCreated",
+  "namespace": "com.rk5.user",
+  "fields": [
+    {"name": "id", "type": "string"},
+    {"name": "firstName", "type": "string"},
+    {"name": "lastName", "type": "string"},
+    {"name": "emailId", "type": "string"}
+  ]
+}

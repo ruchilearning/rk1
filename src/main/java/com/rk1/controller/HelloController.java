@@ -45,6 +45,14 @@ public class HelloController {
 
     }
 
+    @GetMapping(value="/kafkaAvroTopicRecord")
+    @ResponseBody
+    public Object kafkaAvroTopicRecord()
+    {
+        return helloService.callAvroKafkaTopicRecord();
+
+    }
+
     @GetMapping("/flux")
     public Flux<Integer> flux(){
 
