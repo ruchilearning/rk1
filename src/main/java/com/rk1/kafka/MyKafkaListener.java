@@ -1,5 +1,6 @@
 package com.rk1.kafka;
 
+import com.rk5.avro01.Avro01;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,10 +20,11 @@ public class MyKafkaListener {
         acknowledgment.acknowledge();
     }
 
-    @KafkaListener(topics = "test3", groupId = "my-group2", containerFactory = "kafkaListenerContainerFactory")
-    public void onAvroMessage(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
+    @KafkaListener(topics = "rk-avro01", groupId = "my-group-avro", containerFactory = "kafkaListenerContainerFactoryAvro")
+    public void onAvroMessage(ConsumerRecord<String, Avro01> record, Acknowledgment acknowledgment) {
+        System.out.println("Received key: " + record.key());
         System.out.println("Received message: " + record.value());
-        kafkaProducer.sendMessage("test2", record.value());
+        kafkaProducer.sendMessage("test2", record.value().getUuid() + ":" + record.value().getFullName());
         acknowledgment.acknowledge();
     }
 }
