@@ -18,4 +18,11 @@ public class MyKafkaListener {
         kafkaProducer.sendMessage("test2", record.value());
         acknowledgment.acknowledge();
     }
+
+    @KafkaListener(topics = "test3", groupId = "my-group2", containerFactory = "kafkaListenerContainerFactory")
+    public void onAvroMessage(ConsumerRecord<String, String> record, Acknowledgment acknowledgment) {
+        System.out.println("Received message: " + record.value());
+        kafkaProducer.sendMessage("test2", record.value());
+        acknowledgment.acknowledge();
+    }
 }

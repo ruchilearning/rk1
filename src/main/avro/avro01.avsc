@@ -1,0 +1,26 @@
+{
+  "type": "record",
+  "namespace": "com.rk5.avro01",
+  "name": "Avro01",
+  "doc": "Sample default value",
+  "fields": [
+    {
+      "name": "uuid",
+      "type": "string"
+    },
+    {
+      "name": "fullName",
+      "type": "string"
+    },
+    {
+      "name": "maritalStatus",
+      "type": "string",
+      "default": "UNKNOWN"
+    },
+    {
+      "name": "active",
+      "type": "boolean",
+      "default": false
+    }
+  ]
+}

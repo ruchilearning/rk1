@@ -2,6 +2,7 @@ package com.rk1.controller;
 
 import com.rk1.repository.HelloRepository;
 import com.rk1.service.HelloService;
+import com.rk5.avro01.Avro01;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,22 @@ public class HelloController {
     public Mono<HelloRepository.HelloResponse> bootUp()
     {
         return helloService.callHello();
+
+    }
+
+    @GetMapping(value="/kafka")
+    @ResponseBody
+    public Avro01 kafka()
+    {
+        return helloService.callKafka();
+
+    }
+
+    @GetMapping(value="/kafkaAvro")
+    @ResponseBody
+    public Avro01 kafkaAvro()
+    {
+        return helloService.callAvroKafka();
 
     }
 
