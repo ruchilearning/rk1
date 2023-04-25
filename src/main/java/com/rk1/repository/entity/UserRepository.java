@@ -1,4 +1,4 @@
-package com.rk1.entity;
+package com.rk1.repository.entity;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

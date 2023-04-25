@@ -1,7 +1,7 @@
 package com.rk1.service;
 
-import com.rk1.entity.User;
-import com.rk1.entity.UserRepository;
+import com.rk1.repository.entity.User;
+import com.rk1.repository.entity.UserRepository;
 import com.rk1.kafka.KafkaProducer;
 import com.rk1.repository.HelloRepository;
 import com.rk5.avro01.Avro01;

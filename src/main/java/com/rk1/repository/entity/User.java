@@ -1,4 +1,4 @@
-package com.rk1.entity;
+package com.rk1.repository.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
