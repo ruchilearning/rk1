@@ -110,20 +110,21 @@ sourceSets {
 
 
 
-flyway {
-	url = 'jdbc:postgresql://localhost:5432/mydb'
-	user = 'postgress'
-	password = 'password'
-	driver = 'org.postgresql.Driver'
-	baselineOnMigrate = true
-	schemas = ['public']
-	locations = ['filesystem:src/main/resources/db/migration']
-}
-
-//task flywayMigrate(dependsOn: 'flywayMigrate') {  // no  need task 'flywayMigrate' already exists.
-//	description = 'Runs Flyway migrations'
+// only  needed to run flywayClean and flywayMigrate separately
+//flyway {
+//	url = 'jdbc:postgresql://localhost:5432/mydb'
+//	user = 'postgres' //  picked from dataSource username and password
+//	password = 'password'
+//	driver = 'org.postgresql.Driver'
+//	baselineOnMigrate = true
+//	schemas = ['public']
+//	locations = ['filesystem:src/main/resources/db/migration']
 //}
 
-task cleanBuild(dependsOn: ['clean', 'build', 'flywayMigrate']) {
+task flywayMigrate2(dependsOn: 'flywayMigrate') {  // not required  'flywayMigrate' already exists.
+	description = 'Runs Flyway migrations'
+}
+
+task cleanBuild(dependsOn: ['clean', 'build', 'flywayMigrate2']) { 
 	description = 'Cleans, builds, and runs Flyway migrations'
 }
