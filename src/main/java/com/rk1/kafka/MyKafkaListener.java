@@ -24,7 +24,8 @@ public class MyKafkaListener {
     public void onAvroMessage(ConsumerRecord<String, Avro01> record, Acknowledgment acknowledgment) {
         System.out.println("Received key: " + record.key());
         System.out.println("Received message: " + record.value());
-        kafkaProducer.sendMessage("test2", record.value().getUuid() + ":" + record.value().getFullName());
+        kafkaProducer.sendMessage("test2", record.value().getUuid() + ":" + record.value().getFirstName() +" "
+                + record.value().getLastName());
         acknowledgment.acknowledge();
     }
 }

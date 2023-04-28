@@ -9,8 +9,13 @@
       "type": "string"
     },
     {
-      "name": "fullName",
+      "name": "firstName",
       "type": "string"
+    },
+    {
+      "name": "lastName",
+      "type": "string",
+      "default": "DUCK"
     },
     {
       "name": "maritalStatus",

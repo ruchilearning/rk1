@@ -27,7 +27,13 @@ spring:
 #  flyway:
 #    locations: "classpath:db/migration,filesystem:/opt/migration"
 
-
+management:
+  security:
+    enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: startup
 
   kafka:
     bootstrap-servers: localhost:9092 # comma-separated list of broker addresses
@@ -78,3 +84,19 @@ api-services:
     baseUrl: http://localhost:8090
     api1: /api/one
     api2: /api/two
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myCircuitBreaker:
+        slidingWindowSize: 10
+        permittedNumberOfCallsInHalfOpenState: 2
+        waitDurationInOpenState: 5000
+        failureRateThreshold: 50
+
+  retry:
+    instances:
+      myRetry:
+        maxAttempts: 3
+        waitDuration: 1000ms

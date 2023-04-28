@@ -7,6 +7,8 @@ import com.rk1.repository.HelloRepository;
 import com.rk5.avro01.Avro01;
 import com.rk5.user.UserCreated;
 import com.rk5.user.UserUpdated;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -28,17 +30,26 @@ public class HelloService {
     }
 
     public Avro01 callKafka() {
-        Avro01 avro01 = Avro01.newBuilder().setFullName(UUID.randomUUID().toString()).setActive(true).build();
+        Avro01 avro01 = Avro01.newBuilder().setFirstName(UUID.randomUUID().toString()).setActive(true).build();
         kafkaProducer.sendMessage("test1", UUID.randomUUID().toString());
         return avro01;
     }
 
-    public Avro01 callAvroKafka() {
+    @CircuitBreaker(name = "myCircuitBreaker")
+    @Retry(name = "myRetry")
+    public Avro01 callAvroKafka(String firstName, boolean status) {
         Avro01 avro01 = Avro01.newBuilder().setUuid(UUID.randomUUID().toString())
-                .setFullName("Donald Duck").setActive(true).build();
+                .setFirstName(firstName)
+                .setLastName("Duck").setActive(status).build();
+
+        User user = User.builder()
+                .firstName(avro01.getFirstName())
+                .lastName(avro01.getLastName()).active(avro01.getActive()).build();
+        userRepository.save(user);
         kafkaProducer.sendMessageAvro("rk-avro01", avro01);
         return avro01;
     }
+
 
     public Object callAvroKafkaTopicRecord() {
         UserCreated userCreated = new UserCreated("1000", "userFirstName", "UserLastName","userOne@email.com");
