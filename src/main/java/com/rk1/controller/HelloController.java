@@ -5,10 +5,7 @@ import com.rk1.service.HelloService;
 import com.rk5.avro01.Avro01;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -37,11 +34,20 @@ public class HelloController {
 
     }
 
-    @GetMapping(value="/kafkaAvro")
+    @GetMapping(value="/kafkaAvro/{name}")
     @ResponseBody
-    public Avro01 kafkaAvro()
+    public Avro01 kafkaAvro(@PathVariable("name") String name,
+                            @RequestParam(value = "active", required = false) Boolean status)
     {
-        return helloService.callAvroKafka();
+        return helloService.callAvroKafka(name, status);
+
+    }
+
+    @GetMapping(value="/kafkaAvroTopicRecord")
+    @ResponseBody
+    public Object kafkaAvroTopicRecord()
+    {
+        return helloService.callAvroKafkaTopicRecord();
 
     }
 

@@ -2,8 +2,12 @@ package com.rk1.kafka;
 
 import com.rk1.configs.KafkaConfigProperties;
 import com.rk5.avro01.Avro01;
+import com.rk5.user.UserCreated;
+import com.rk5.user.UserUpdated;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializerConfig;
+import io.confluent.kafka.serializers.subject.TopicRecordNameStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -25,6 +29,7 @@ public class KafkaProducer {
 
     private KafkaTemplate<String, String> kafkaTemplate;
     private KafkaTemplate<String, Avro01> kafkaTemplateAvro;
+    private KafkaTemplate<String, Object> kafkaTemplateTopicRecord;
     @Autowired
     private  KafkaConfigProperties kafkaConfigProperties;
 
@@ -58,6 +63,19 @@ public class KafkaProducer {
     }
 
 
+    @PostConstruct
+    private void KafkaProducerAvroTopicRecord() {
+        Map<String, Object> propsTopicRecord = new HashMap<>();
+        propsTopicRecord.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConfigProperties.getBootstrapServers());
+        propsTopicRecord.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,  StringSerializer.class);
+        propsTopicRecord.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaAvroSerializer.class);
+        propsTopicRecord.put(KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+        propsTopicRecord.put(KafkaAvroSerializerConfig.VALUE_SUBJECT_NAME_STRATEGY, TopicRecordNameStrategy.class);
+        DefaultKafkaProducerFactory<String, Object> pf3 = new DefaultKafkaProducerFactory<>(propsTopicRecord);
+        KafkaTemplate<String, Object> template3 = new KafkaTemplate<>(pf3);
+        this.kafkaTemplateTopicRecord = template3;
+    }
+
     public void sendMessage(String topic, String message) {
         log.info("rk1 send sendMessage called topic:" + topic);
         kafkaTemplate.send(topic, message);
@@ -66,5 +84,15 @@ public class KafkaProducer {
     public void sendMessageAvro(String topic, Avro01 message) {
         log.info("rk1 send sendMessageAvro called topic:" + topic);
         kafkaTemplateAvro.send(topic, UUID.randomUUID().toString(), message);
+    }
+
+    public void sendMessageAvroTopicRecord(String topic, UserUpdated message) {
+        log.info("rk1 send sendMessageAvroTopicRecord called topic:" + topic);
+        kafkaTemplateTopicRecord.send(topic, UUID.randomUUID().toString(), message);
+    }
+
+    public void sendMessageAvroTopicRecord(String topic, UserCreated message) {
+        log.info("rk1 send sendMessageAvroTopicRecord called topic:" + topic);
+        kafkaTemplateTopicRecord.send(topic, UUID.randomUUID().toString(), message);
     }
 }

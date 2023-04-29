@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "UserUpdated",
+  "namespace": "com.rk5.user",
+  "fields": [
+    {"name": "id", "type": "string"},
+    {"name": "firstName", "type": "string"},
+    {"name": "lastName", "type": "string"},
+    {"name": "email", "type": "string"},
+    {"name": "updatedAt", "type": "long"}
+  ]
+}
