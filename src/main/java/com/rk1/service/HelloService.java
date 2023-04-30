@@ -10,14 +10,19 @@ import com.rk5.user.UserUpdated;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.JDBCConnectionException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HelloService {
     private final HelloRepository helloRepository;
     private final KafkaProducer kafkaProducer;
@@ -30,13 +35,14 @@ public class HelloService {
     }
 
     public Avro01 callKafka() {
-        Avro01 avro01 = Avro01.newBuilder().setFirstName(UUID.randomUUID().toString()).setActive(true).build();
+        Avro01 avro01 = Avro01.newBuilder().setUuid(UUID.randomUUID().toString())
+                .setFirstName(UUID.randomUUID().toString()).setActive(true).build();
         kafkaProducer.sendMessage("test1", UUID.randomUUID().toString());
         return avro01;
     }
 
-    @CircuitBreaker(name = "myCircuitBreaker")
-    @Retry(name = "myRetry")
+//    @CircuitBreaker(name = "myCircuitBreaker")
+//    @Retry(name = "myRetry")
     public Avro01 callAvroKafka(String firstName, boolean status) {
         Avro01 avro01 = Avro01.newBuilder().setUuid(UUID.randomUUID().toString())
                 .setFirstName(firstName)
@@ -45,7 +51,8 @@ public class HelloService {
         User user = User.builder()
                 .firstName(avro01.getFirstName())
                 .lastName(avro01.getLastName()).active(avro01.getActive()).build();
-        userRepository.save(user);
+
+//        userRepository.save(user);
         kafkaProducer.sendMessageAvro("rk-avro01", avro01);
         return avro01;
     }
