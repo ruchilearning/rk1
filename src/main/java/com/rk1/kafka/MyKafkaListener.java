@@ -2,9 +2,11 @@ package com.rk1.kafka;
 
 import com.rk1.service.MyListenerService;
 import com.rk5.avro01.Avro01;
+import com.rk5.user.UserCreated;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
@@ -37,6 +39,18 @@ public class MyKafkaListener {
         log.info("After service call key: {}, Received message: {}", record.key(), value);
         acknowledgment.acknowledge();
 
+    }
+
+    @KafkaListener(topics = "rk-KafkaTopicRecord", groupId = "my-group-avro-topicRecord", containerFactory = "kafkaListenerContainerFactoryAvroTopicRecord")
+    public void onAvroMessageTopicRecord(ConsumerRecord<String, SpecificRecord> record, Acknowledgment acknowledgment) {
+
+        SpecificRecord value = record.value();
+        if  (value instanceof UserCreated) {
+            log.info("Received key: {}, Received message: {}", record.key(), value);
+            myListenerService.processKafkaMessageTopicRecord((UserCreated) value);
+            log.info("After service call key: {}, Received message: {}", record.key(), value);
+        }
+        acknowledgment.acknowledge();
     }
 
     public void handleFallback(ConsumerRecord<?, ?> record, Acknowledgment acknowledgment, Throwable throwable) {
