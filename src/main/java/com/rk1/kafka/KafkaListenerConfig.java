@@ -4,6 +4,9 @@ import com.rk1.configs.KafkaConfigProperties;
 import com.rk5.avro01.Avro01;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
+import io.confluent.kafka.serializers.subject.TopicRecordNameStrategy;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,7 @@ import java.util.Map;
 
 @EnableKafka
 @Configuration
+@Slf4j
 public class KafkaListenerConfig {
 
     @Autowired
@@ -63,7 +67,10 @@ public class KafkaListenerConfig {
         props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, KafkaAvroDeserializer.class);
 //        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG, "my-group-avro");    // works can remove from Lister
         props.put(KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, SCHEMA_REGISTRY_URL);
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+//        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
+
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
@@ -72,6 +79,47 @@ public class KafkaListenerConfig {
         ConcurrentKafkaListenerContainerFactory<String, Avro01> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryAvro());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+//        factory.setCommonErrorHandler(errorHandler());
         return factory;
     }
+
+
+
+    @Bean
+    public   DefaultKafkaConsumerFactory<String, SpecificRecord> consumerFactoryAvroTopicRecord() {
+        final String BOOTSTRAP_SERVERS = "localhost:9092";
+        final String SCHEMA_REGISTRY_URL = "http://localhost:8081";
+        Map<String, Object> props = new HashMap<>();
+
+        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
+        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, ErrorHandlingDeserializer.class);
+        props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, StringDeserializer.class);
+        props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, KafkaAvroDeserializer.class);
+        props.put(KafkaAvroDeserializerConfig.SCHEMA_REGISTRY_URL_CONFIG, SCHEMA_REGISTRY_URL);
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+        props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
+        props.put(KafkaAvroDeserializerConfig.VALUE_SUBJECT_NAME_STRATEGY, TopicRecordNameStrategy.class);
+
+
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> kafkaListenerContainerFactoryAvroTopicRecord() {
+        ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(consumerFactoryAvroTopicRecord());
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        return factory;
+    }
+
+
+//    @Bean
+//    public DefaultErrorHandler errorHandler() {
+//        FixedBackOff fixedBackOff = new FixedBackOff(5000, 3);
+//        DefaultErrorHandler errorHandler = new DefaultErrorHandler((consumerRecord, exception) -> {
+//            log.info("DefaultErrorHandler <<<<<-------->>>>> : " + consumerRecord.key() + ": error: " + exception.getCause());
+//            }, fixedBackOff);
+//        return errorHandler;
+//    }
 }

@@ -1,9 +1,11 @@
 package com.rk1.controller;
 
 import com.rk1.repository.HelloRepository;
+import com.rk1.repository.entity.User;
 import com.rk1.service.HelloService;
 import com.rk5.avro01.Avro01;
 import lombok.RequiredArgsConstructor;
+import org.apache.avro.data.Json;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -28,19 +30,31 @@ public class HelloController {
 
     @GetMapping(value="/kafka")
     @ResponseBody
-    public Avro01 kafka()
+    public User kafka()
     {
-        return helloService.callKafka();
+        Avro01 avro01 = helloService.callKafka();
+        User user = User.builder()
+                .firstName(avro01.getFirstName())
+                .lastName(avro01.getLastName())
+                .emailId(avro01.getUuid())
+                .active(avro01.getActive()).build();
+        return user;
 
     }
 
     @GetMapping(value="/kafkaAvro/{name}")
     @ResponseBody
-    public Avro01 kafkaAvro(@PathVariable("name") String name,
+    public User kafkaAvro(@PathVariable("name") String name,
                             @RequestParam(value = "active", required = false) Boolean status)
     {
-        return helloService.callAvroKafka(name, status);
 
+        Avro01 avro01 = helloService.callAvroKafka(name, status);
+        User user = User.builder()
+                .firstName(avro01.getFirstName())
+                .lastName(avro01.getLastName())
+                .emailId(avro01.getUuid())
+                .active(avro01.getActive()).build();
+        return user;
     }
 
     @GetMapping(value="/kafkaAvroTopicRecord")

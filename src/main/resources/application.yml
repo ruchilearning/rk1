@@ -1,6 +1,6 @@
 
 server:
-  port: 8080
+  port: 8090
 spring:
 #  profiles:
 #    default: dev
@@ -88,15 +88,40 @@ api-services:
 
 resilience4j:
   circuitbreaker:
+    configs:
+      kafkaConsumerConfig:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
     instances:
       myCircuitBreaker:
         slidingWindowSize: 10
         permittedNumberOfCallsInHalfOpenState: 2
         waitDurationInOpenState: 5000
         failureRateThreshold: 50
+      kafkaConsumerCircuitBreaker:
+        slidingWindowSize: 10
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30000
+        ringBufferSizeInHalfOpenState: 3
+        ringBufferSizeInClosedState: 3
+#      kafkaConsumerCircuitBreaker:
+#        register-health-indicator: true
+#        sliding-window-size: 10
+#        sliding-window-type: COUNT_BASED
+#        minimum-number-of-calls: 5
+#        permitted-number-of-calls-in-half-open-state: 2
+#        wait-duration-in-open-state: 5s
+#        failure-rate-threshold: 50
+#        automatic-transition-from-open-to-half-open-enabled: true
+#        ignore-exceptions:
+#          - java.io.IOException
+#          - java.net.SocketException
+
 
   retry:
     instances:
       myRetry:
-        maxAttempts: 3
-        waitDuration: 1000ms
+        maxAttempts: 10
+        waitDuration: 100ms
