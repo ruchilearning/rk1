@@ -45,12 +45,18 @@ public class MyKafkaListener {
     public void onAvroMessageTopicRecord(ConsumerRecord<String, SpecificRecord> record, Acknowledgment acknowledgment) {
 
         SpecificRecord value = record.value();
-        if  (value instanceof UserCreated) {
-            log.info("Received key: {}, Received message: {}", record.key(), value);
-            myListenerService.processKafkaMessageTopicRecord((UserCreated) value);
-            log.info("After service call key: {}, Received message: {}", record.key(), value);
-        }
+        log.info("Received key: {}, Received message: {}", record.key(), value);
+        myListenerService.processKafkaMessageTopicRecord((UserCreated) value);
+        log.info("After service call key: {}, Received message: {}", record.key(), value);
         acknowledgment.acknowledge();
+
+//        SpecificRecord value = record.value();
+//        if  (value instanceof UserCreated) {
+//            log.info("Received key: {}, Received message: {}", record.key(), value);
+//            myListenerService.processKafkaMessageTopicRecord((UserCreated) value);
+//            log.info("After service call key: {}, Received message: {}", record.key(), value);
+//        }
+//        acknowledgment.acknowledge();
     }
 
     public void handleFallback(ConsumerRecord<?, ?> record, Acknowledgment acknowledgment, Throwable throwable) {

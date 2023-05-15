@@ -2,12 +2,14 @@ package com.rk1.kafka;
 
 import com.rk1.configs.KafkaConfigProperties;
 import com.rk5.avro01.Avro01;
+import com.rk5.user.UserCreated;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig;
 import io.confluent.kafka.serializers.subject.TopicRecordNameStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.kafka.listener.adapter.RecordFilterStrategy;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 
 import java.util.HashMap;
@@ -100,6 +103,11 @@ public class KafkaListenerConfig {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         props.put(KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG, true);
         props.put(KafkaAvroDeserializerConfig.VALUE_SUBJECT_NAME_STRATEGY, TopicRecordNameStrategy.class);
+//        props.put("specific.avro.reader.value.type", UserCreated.class);
+
+//        RecordFilterStrategy<String, Object> recordFilterStrategy = new UserCreatedRecordFilterStrategy();
+//        props.put("record.filter.strategy", recordFilterStrategy);
+
 
 
         return new DefaultKafkaConsumerFactory<>(props);
@@ -110,7 +118,19 @@ public class KafkaListenerConfig {
         ConcurrentKafkaListenerContainerFactory<String, SpecificRecord> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactoryAvroTopicRecord());
         factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.setRecordFilterStrategy(
+                record -> record.value().getSchema().getName().equals("UserUpdated"));
         return factory;
+    }
+
+    public class UserCreatedRecordFilterStrategy implements RecordFilterStrategy<String, Object> {
+        @Override
+        public boolean filter(ConsumerRecord<String, Object> consumerRecord) {
+            if  (consumerRecord.value() instanceof UserCreated) {
+                return false;
+            }
+            return true;
+        }
     }
 
 
