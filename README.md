@@ -19,13 +19,6 @@ Alternatively you can use the [Spring Boot gradle plugin](https://docs.spring.io
 ./gradlew bootRun --args='--spring.profiles.active=dev'
 ```
 
-## Deploying the application to OpenShift
-
-
-```shell
-oc new-app codecentric/springboot-maven3-centos~https://github.com/codecentric/springboot-sample-app
-```
-
 This will create:
 
 ```shell
@@ -34,8 +27,3 @@ docker run -p 8080:8080 my-image-name
 docker logs -f my-container-name
 
 ```
-
-## Copyright
-
-Released under the Apache License 2.0. See the [LICENSE](https://github.com/codecentric/springboot-sample-app/blob/master/LICENSE) file.
-
